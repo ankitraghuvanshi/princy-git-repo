@@ -10,17 +10,14 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   const agent = new WebhookClient({ request, response });
   //console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   //console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
-  console.log('agent', agent);
-  
-  //var name = request.body.queryResult.parameters.name;
   
   function welcome(agent) {
-    agent.add(`Welcome to my agent!`);
+    agent.add("Welcome to my agent!");
   }
  
   function fallback(agent) {
-    agent.add(`I didn't understand`);
-    agent.add(`I'm sorry, can you try again?`);
+    agent.add("I didn't understand");
+    agent.add("I'm sorry, can you try again?");
   }
   
   function Hello(agent) {
@@ -62,17 +59,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 	  cardObj.text = text;
 	  cardObj.buttonText = buttonText;
 	  cardObj.buttonUrl = buttonUrl;
-	  
-	  /*
-	  new Card({
-          title: 'First card',
-          imageUrl: 'http://xinature.com/wp-content/uploads/2016/10/flowers-love-rose-flower-delicte-blue-wallpapers-big-size.jpg',
-          text: 'this is the body of the card .. this is the body of the card... this is the body of the card',
-          buttonText: 'this is a button',
-          buttonUrl: 'http://xinature.com/wp-content/uploads/2016/10/flowers-love-rose-flower-delicte-blue-wallpapers-big-size.jpg'
-          })
-      
-	  */
+
 	  return new Card(cardObj);
   }
   
@@ -85,8 +72,12 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     console.log(data.userId)
    });
   }
-  
 
+    function Grocery(){
+        var groceryItem = request.body.queryResult.parameters.Daily_need;
+        console.log('groceryItem :: ' + groceryItem);
+        agent.add('Which store you want to buy your items from? (One time trigger before order start');
+    }
   // List of all the Intent available
   let intentMap = new Map();
   
@@ -94,6 +85,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   intentMap.set('Default Fallback Intent', fallback);
   intentMap.set('Hello', Hello);
   intentMap.set('TypeOfCard', TypeOfCard);
+  intentMap.set('Grocery', Grocery);
   intentMap.set('getApi',getApi);
   
   agent.handleRequest(intentMap);
